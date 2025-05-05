@@ -1,7 +1,4 @@
 'use strict';
-
-const { setDefaultAutoSelectFamily } = require("net");
-
 {
     const SelectBox = {
         cache: {},

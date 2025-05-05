@@ -132,11 +132,11 @@ select.form-select {
     padding: 10px;
     font-size: 1rem;
     color: #ffffff; /* Texto blanco */
-    background-color: #1b263b; /* Azul oscuro */
+    background-color: #132f63; /* Azul oscuro */
 }
 
 select.form-select:focus {
-    border-color: #f4a261; /* Dorado elegante */
+    border-color: #000000; /* Dorado elegante */
     box-shadow: 0 0 5px rgba(244, 162, 97, 0.5);
     outline: none;
 }
