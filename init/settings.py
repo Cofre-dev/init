@@ -28,9 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+zh$icz--&yn8b7d8ogpti9pn)m^snjt29a)cfv7^!f(7yx&jt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+# DEBUG = os.getenv('DEBUG', 'False') == 'True' # Cambia esto a True para desarrollo local
+DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['https://init-fzq8.onrender.com', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -85,6 +87,11 @@ DATABASES = {
     }
 }
 
+# import dj_database_url as bd
+# DATABASES = {
+#     'default': bd.config(default=os.getenv('DATABASE_URL'))
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -123,7 +130,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'CORE', 'static'),
+    os.path.join(BASE_DIR, 'CORE')
 ]
 # Para la producción
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
