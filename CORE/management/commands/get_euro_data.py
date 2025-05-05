@@ -14,11 +14,16 @@ API_PASS = "Mat.FVC965"
 
 def obtener_ruta_descargas():
     try:
-        # se crea una carpeta temporal para guardar los archivos descargados
-        from django.conf import settings
-        ruta_temporal = os.path.join(settings.MEDIA_ROOT, "descargas")
-        os.makedirs(ruta_temporal, exist_ok=True)
-        return ruta_temporal
+        if getattr(sys, 'frozen', False):
+            # Modo ejecutable
+            base_dir = os.path.dirname(sys.executable)
+        else:
+            # Modo desarrollo
+            base_dir = os.path.expanduser("~")
+
+        descargas = os.path.join(base_dir, "Downloads", "IndicadoresBCCH")
+        os.makedirs(descargas, exist_ok=True)
+        return descargas
     except Exception as e:
         print(f"Error al obtener ruta de descargas: {str(e)}")
         return None
@@ -89,10 +94,9 @@ class Command(BaseCommand):
         df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d-%m-%Y')
         df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce')
 
-        nombre_archivo = f"DOLAR_{datetime.now().strftime('%Y%m%d')}.xlsx"
+        nombre_archivo = f"EURO_{datetime.now().strftime('%Y%m%d')}.xlsx"
 
         if guardar_excel(df, nombre_archivo):
             self.stdout.write(self.style.SUCCESS('Proceso completado exitosamente'))
         else:
             self.stdout.write(self.style.ERROR('Error al guardar el archivo Excel'))
-

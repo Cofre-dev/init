@@ -5,14 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ara y bustamente consultores</title>
-    <!-- Link de conexión con CSS -->
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
-    <!-- Link de conexión con Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 <body>
 
-    <!-- Barra de navegación -->
     <div class="topnav">
         <a class="active" href="#home">Inicio</a>
         <a href="#services">Servicios</a>
@@ -20,19 +17,14 @@
         <a href="#contact">Contacto</a>
     </div>
 
-    <!-- Contenedor principal -->
     <div class="container mt-5">
-        <!-- Logo -->
         <img src="{% static 'core/img/logo.ico' %}" alt="Logo" class="mb-4 logo">
-
-        <!-- Título principal -->
         <h1 class="text-center mb-4">Indicadores Financieros Actualizados</h1>
 
-        <!-- Mensajes de alerta -->
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
-                <div class="alert 
+                <div class="alert
                     {% if message.tags %}
                         alert-{{ message.tags }}
                     {% endif %}" role="alert">
@@ -42,9 +34,7 @@
         </div>
         {% endif %}
 
-        <!-- Formulario -->
-        <form method="post" class="mb-4">
-            {% csrf_token %}
+        <form method="post" class="mb-4" action="{% url 'obtener_indicadores' %}"> {% csrf_token %}
             <div class="mb-3">
                 <label for="indicador" class="form-label">Seleccionar Indicador:</label>
                 <select class="form-select" name="indicador" id="indicador">
@@ -55,15 +45,19 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Obtener Datos</button>
         </form>
+
+        {% comment %} {% if nombre_archivo_descarga %}
+        <div class="mt-3 text-center">
+            <a href="{% url 'descargar_indicador' nombre_archivo=nombre_archivo_descarga %}" class="btn btn-success">Descargar Archivo</a>
+        </div>
+        {% endif %} {% endcomment %}
     </div>
 
-    <!-- Pie de página -->
     <footer class="mt-5">
         <p>&copy; 2025 Ara y bustamante consultores. Todos los derechos reservados.</p>
         <p><a href="#contact">Contáctanos</a> | <a href="#privacy">Política de Privacidad</a></p>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 </body>
 </html>
