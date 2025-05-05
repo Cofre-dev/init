@@ -25,7 +25,7 @@ def obtener_indicadores(request):
             elif indicador == 'dolar':
                 call_command('get_dolar_data')
                 messages.success(request, '¡Datos del Dólar obtenidos y guardados exitosamente!')
-            elif indicador == 'todo':
+            elif indicador == 'todo': #Falta completar esta parte
                 get_all_data_task.delay() 
                 messages.success(request, '¡Todos los datos han sido descargados!')
         except Exception as e:

@@ -121,8 +121,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'CORE', 'static'),
 ]
-# Para la producción (lo configuraremos más adelante si es necesario)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Para la producción
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
