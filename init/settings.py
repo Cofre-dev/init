@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-+zh$icz--&yn8b7d8ogpti9pn)m^snjt29a)cfv7^!f(7yx&jt
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['https://init-fzq8.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['init-fzq8.onrender.com', '127.0.0.1', 'localhost']
 
 # Application definition
 
