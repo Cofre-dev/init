@@ -1,35 +1,124 @@
-from django.shortcuts import render
+# from django.shortcuts import render
+# from django.http import HttpResponse
+# from django.contrib import messages
+# import pandas as pd
+# import os
+# from datetime import datetime
+# import requests
+# import sys
+# from django.core.management.base import BaseCommand
+
+# # Configuración
+# USD_CODE = "F073.TCO.PRE.Z.D"
+# API_USER = "rojascofrem@gmail.com"
+# API_PASS = "Mat.FVC965"
+
+# def obtener_ruta_descargas():
+#     try:
+#         if getattr(sys, 'frozen', False):
+#             # Modo ejecutable
+#             base_dir = os.path.dirname(sys.executable)
+#         else:
+#             # Modo desarrollo
+#             base_dir = os.path.expanduser("~")
+
+#         descargas = os.path.join(base_dir, "Downloads", "IndicadoresBCCH")
+#         os.makedirs(descargas, exist_ok=True)
+#         return descargas
+#     except Exception as e:
+#         print(f"Error al obtener ruta de descargas: {str(e)}")
+#         return None
+
+# def obtener_datos_bcch(indicador, fecha_inicio, fecha_fin):
+#     try:
+#         url = (
+#             f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?"
+#             f"user={API_USER}&pass={API_PASS}&"
+#             f"firstdate={fecha_inicio}&lastdate={fecha_fin}&"
+#             f"timeseries={indicador}&function=GetSeries"
+#         )
+
+#         respuesta = requests.get(url, timeout=30)
+#         respuesta.raise_for_status()
+#         return respuesta.json()
+#     except Exception as e:
+#         print(f"Error al obtener datos de la API: {str(e)}")
+#         return None
+
+# def guardar_excel(datos, nombre_archivo):
+#     try:
+#         ruta_descargas = obtener_ruta_descargas()
+#         if not ruta_descargas:
+#             return False
+
+#         ruta_completa = os.path.join(ruta_descargas, nombre_archivo)
+
+#         contador = 1
+#         base, extension = os.path.splitext(ruta_completa)
+#         while os.path.exists(ruta_completa):
+#             ruta_completa = f"{base}_{contador}{extension}"
+#             contador += 1
+
+#         datos.to_excel(ruta_completa, index=False)
+#         print(f"Archivo guardado exitosamente en: {ruta_completa}")
+#         return True
+#     except Exception as e:
+#         print(f"Error al guardar archivo Excel: {str(e)}")
+#         return False
+
+# class Command(BaseCommand):
+#     help = 'Obtiene y guarda los datos del DOLAR del Banco Central'
+
+#     def handle(self, *args, **options):
+#         self.stdout.write(self.style.SUCCESS('Iniciando descarga de datos del DOLAR...'))
+
+#         fecha_inicio = (datetime.now() - pd.DateOffset(months=1)).strftime("%Y-%m-%d")
+#         fecha_fin = datetime.now().strftime("%Y-%m-%d")
+
+#         datos = obtener_datos_bcch(USD_CODE, fecha_inicio, fecha_fin)
+#         if not datos:
+#             self.stdout.write(self.style.ERROR('No se recibieron datos válidos de la API'))
+#             return
+
+#         if 'Series' not in datos or 'Obs' not in datos['Series']:
+#             self.stdout.write(self.style.ERROR('Estructura de datos inesperada'))
+#             return
+
+#         df = pd.DataFrame(datos['Series']['Obs'])
+#         df = df.drop(columns=['statusCode'], errors='ignore') 
+#         df = df.rename(columns={
+#             'indexDateString': 'Fecha',
+#             'value': 'Valor'
+#         })
+
+#         # Convertir tipos de datos
+#         df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d-%m-%Y')
+#         df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce')
+
+#         nombre_archivo = f"DOLAR_{datetime.now().strftime('%Y%m%d')}.xlsx"
+
+#         if guardar_excel(df, nombre_archivo):
+#             self.stdout.write(self.style.SUCCESS('Proceso completado exitosamente'))
+#         else:
+#             self.stdout.write(self.style.ERROR('Error al guardar el archivo Excel'))
+    
+"""*************************************************************************************"""
+
 from django.http import HttpResponse
-from django.contrib import messages
 import pandas as pd
-import os
 from datetime import datetime
 import requests
-import sys
-from django.core.management.base import BaseCommand
+from io import BytesIO
 
 # Configuración
 USD_CODE = "F073.TCO.PRE.Z.D"
 API_USER = "rojascofrem@gmail.com"
 API_PASS = "Mat.FVC965"
 
-def obtener_ruta_descargas():
-    try:
-        if getattr(sys, 'frozen', False):
-            # Modo ejecutable
-            base_dir = os.path.dirname(sys.executable)
-        else:
-            # Modo desarrollo
-            base_dir = os.path.expanduser("~")
-
-        descargas = os.path.join(base_dir, "Downloads", "IndicadoresBCCH")
-        os.makedirs(descargas, exist_ok=True)
-        return descargas
-    except Exception as e:
-        print(f"Error al obtener ruta de descargas: {str(e)}")
-        return None
-
 def obtener_datos_bcch(indicador, fecha_inicio, fecha_fin):
+    """
+    Obtiene datos del Banco Central de Chile desde su API.
+    """
     try:
         url = (
             f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?"
@@ -37,7 +126,6 @@ def obtener_datos_bcch(indicador, fecha_inicio, fecha_fin):
             f"firstdate={fecha_inicio}&lastdate={fecha_fin}&"
             f"timeseries={indicador}&function=GetSeries"
         )
-
         respuesta = requests.get(url, timeout=30)
         respuesta.raise_for_status()
         return respuesta.json()
@@ -45,60 +133,44 @@ def obtener_datos_bcch(indicador, fecha_inicio, fecha_fin):
         print(f"Error al obtener datos de la API: {str(e)}")
         return None
 
-def guardar_excel(datos, nombre_archivo):
-    try:
-        ruta_descargas = obtener_ruta_descargas()
-        if not ruta_descargas:
-            return False
+def descargar_excel(request, indicador):
+    """
+    Genera un archivo Excel con los datos de un indicador
+    y lo envía como respuesta directa al navegador.
+    """
+    fecha_inicio = (datetime.now() - pd.DateOffset(months=1)).strftime("%Y-%m-%d")
+    fecha_fin = datetime.now().strftime("%Y-%m-%d")
 
-        ruta_completa = os.path.join(ruta_descargas, nombre_archivo)
+    datos = obtener_datos_bcch(indicador, fecha_inicio, fecha_fin)
+    if not datos:
+        return HttpResponse("No se recibieron datos válidos de la API.", status=400)
 
-        contador = 1
-        base, extension = os.path.splitext(ruta_completa)
-        while os.path.exists(ruta_completa):
-            ruta_completa = f"{base}_{contador}{extension}"
-            contador += 1
+    if 'Series' not in datos or 'Obs' not in datos['Series']:
+        return HttpResponse("Estructura de datos inesperada.", status=400)
 
-        datos.to_excel(ruta_completa, index=False)
-        print(f"Archivo guardado exitosamente en: {ruta_completa}")
-        return True
-    except Exception as e:
-        print(f"Error al guardar archivo Excel: {str(e)}")
-        return False
+    # Procesar los datos en un DataFrame de pandas
+    df = pd.DataFrame(datos['Series']['Obs'])
+    df = df.drop(columns=['statusCode'], errors='ignore')  # Eliminar la columna statusCode si existe
+    df = df.rename(columns={
+        'indexDateString': 'Fecha',
+        'value': 'Valor'
+    })
+    df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d-%m-%Y')
+    df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce')
 
-class Command(BaseCommand):
-    help = 'Obtiene y guarda los datos del DOLAR del Banco Central'
+    # Crear el archivo Excel en memoria
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name=indicador)
 
-    def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS('Iniciando descarga de datos del DOLAR...'))
+    # Configurar el puntero al inicio del buffer
+    output.seek(0)
 
-        fecha_inicio = (datetime.now() - pd.DateOffset(months=1)).strftime("%Y-%m-%d")
-        fecha_fin = datetime.now().strftime("%Y-%m-%d")
-
-        datos = obtener_datos_bcch(USD_CODE, fecha_inicio, fecha_fin)
-        if not datos:
-            self.stdout.write(self.style.ERROR('No se recibieron datos válidos de la API'))
-            return
-
-        if 'Series' not in datos or 'Obs' not in datos['Series']:
-            self.stdout.write(self.style.ERROR('Estructura de datos inesperada'))
-            return
-
-        df = pd.DataFrame(datos['Series']['Obs'])
-        df = df.drop(columns=['statusCode'], errors='ignore') 
-        df = df.rename(columns={
-            'indexDateString': 'Fecha',
-            'value': 'Valor'
-        })
-
-        # Convertir tipos de datos
-        df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d-%m-%Y')
-        df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce')
-
-        nombre_archivo = f"DOLAR_{datetime.now().strftime('%Y%m%d')}.xlsx"
-
-        if guardar_excel(df, nombre_archivo):
-            self.stdout.write(self.style.SUCCESS('Proceso completado exitosamente'))
-        else:
-            self.stdout.write(self.style.ERROR('Error al guardar el archivo Excel'))
-    
+    # Enviar el archivo al cliente
+    nombre_archivo = f"{indicador.upper()}_{datetime.now().strftime('%Y%m%d')}.xlsx"
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+    return response
