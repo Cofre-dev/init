@@ -1,0 +1,166 @@
+/* General */
+body {
+    font-family: 'Roboto', sans-serif; /* Fuente moderna y profesional */
+    background-color: #1c4b7d; /* Azul marino oscuro */
+    color: #ffffff; /* Texto blanco */
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+}
+
+.container {
+    background-color: #1f3b6d; /* Azul más claro para el fondo del contenedor */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra elegante */
+    margin-top: 30px;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 120px; /* Tamaño ajustado para un logo elegante */
+}
+
+h1 {
+    color: #f4a261; /* Dorado elegante para destacar el título */
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ffffff; /* Texto blanco */
+}
+
+.btn-primary {
+    background-color: #1b263b; /* Azul oscuro elegante */
+    border-color: #f4a261; /* Borde dorado */
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+    color: #ffffff; /* Texto blanco */
+}
+
+.btn-primary:hover {
+    background-color: #f4a261; /* Dorado elegante */
+    color: #1b263b; /* Texto azul oscuro */
+    transform: scale(1.05); /* Efecto de agrandamiento */
+}
+
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background-color: #1e5128; /* Verde oscuro */
+    border-color: #4caf50;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.alert-danger {
+    background-color: #b22222; /* Rojo oscuro */
+    border-color: #ff4d4d;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.alert-info {
+    background-color: #1b263b; /* Azul oscuro */
+    border-color: #f4a261; /* Dorado */
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #ffffff; /* Texto blanco */
+}
+
+footer a {
+    color: #f4a261; /* Dorado elegante */
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar */
+.topnav {
+    background-color: #1b263b; /* Azul oscuro elegante */
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Sombra elegante */
+}
+
+.topnav a {
+    float: left;
+    color: #ffffff; /* Texto blanco */
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.topnav a:hover {
+    background-color: #f4a261; /* Dorado elegante */
+    color: #1b263b; /* Texto azul oscuro */
+}
+
+.topnav a.active {
+    background-color: #f4a261; /* Dorado elegante para el enlace activo */
+    color: #1b263b; /* Texto azul oscuro */
+}
+
+/* Formulario */
+select.form-select {
+    border-radius: 5px;
+    border: 1px solid #f4a261; /* Borde dorado */
+    padding: 10px;
+    font-size: 1rem;
+    color: #ffffff; /* Texto blanco */
+    background-color: #132f63; /* Azul oscuro */
+}
+
+select.form-select:focus {
+    border-color: #000000; /* Dorado elegante */
+    box-shadow: 0 0 5px rgba(244, 162, 97, 0.5);
+    outline: none;
+}
+
+/* Botón de envío */
+button[type="submit"] {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .topnav a {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}

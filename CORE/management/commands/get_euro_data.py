@@ -94,7 +94,7 @@ class Command(BaseCommand):
         df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d-%m-%Y')
         df['Valor'] = pd.to_numeric(df['Valor'], errors='coerce')
 
-        nombre_archivo = f"EURO_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        nombre_archivo = f"DOLAR_{datetime.now().strftime('%Y%m%d')}.xlsx"
 
         if guardar_excel(df, nombre_archivo):
             self.stdout.write(self.style.SUCCESS('Proceso completado exitosamente'))
