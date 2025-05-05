@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultora Contable Elite</title>
+    <title>Ara y bustamente consultores</title>
     <!-- Link de conexión con CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <!-- Link de conexión con Bootstrap -->
@@ -33,7 +33,9 @@
         <div class="messages">
             {% for message in messages %}
                 <div class="alert 
-                    {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                    {% if message.tags %}
+                        alert-{{ message.tags }}
+                    {% endif %}" role="alert">
                     {{ message }}
                 </div>
             {% endfor %}
