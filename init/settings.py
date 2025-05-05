@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+"""Al momento de hacer la conexion con postgres SQL hay que descomentar la libreria de dj_database_url y la parte de la base de datos y comentar la parte de sqlite3."""
+
+
 from pathlib import Path
 import os
+#import dj_database_url as bd
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+zh$icz--&yn8b7d8ogpti9pn)m^snjt29a)cfv7^!f(7yx&jt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -77,6 +81,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        #'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
     }
 }
 
@@ -111,7 +116,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -123,6 +127,7 @@ STATICFILES_DIRS = [
 ]
 # Para la producción
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
